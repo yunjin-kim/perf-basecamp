@@ -56,7 +56,7 @@ const useGifSearch = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      if (gifAPIService.gifsCache['gifs'].length) {
+      if (!gifAPIService.refreshGifs() && gifAPIService.gifsCache['gifs'].length) {
         setGifList(gifAPIService.gifsCache['gifs']);
 
         return;
@@ -65,6 +65,7 @@ const useGifSearch = () => {
       if (status === SEARCH_STATUS.BEFORE_SEARCH) {
         const gifs: GifImageModel[] = await gifAPIService.getTrending();
         gifAPIService.gifsCache['gifs'] = gifs;
+        gifAPIService.startGifsCacheTime();
         setGifList(gifs);
       }
     };

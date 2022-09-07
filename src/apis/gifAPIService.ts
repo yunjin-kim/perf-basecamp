@@ -1,7 +1,6 @@
+import { GifImageModel } from './../models/image/gifImage';
 import { GifsResult, GiphyFetch, SearchOptions } from '@giphy/js-fetch-api';
 import { IGif } from '@giphy/js-types';
-
-import { GifImageModel } from '../models/image/gifImage';
 
 const apiKey = process.env.GIPHY_API_KEY || '';
 const gf = new GiphyFetch(apiKey);
@@ -20,8 +19,25 @@ function convertResponseToModel(gifList: IGif[]): GifImageModel[] {
   });
 }
 
+type GifsCache = {
+  gifs: GifImageModel[];
+  cacheTime: number;
+};
+
 export const gifAPIService = {
-  gifsCache: { gifs: [] } as Record<'gifs', GifImageModel[]>,
+  gifsCache: { gifs: [], cacheTime: 0 } as GifsCache,
+
+  startGifsCacheTime: function () {
+    this.gifsCache['cacheTime'] = new Date().getTime();
+  },
+
+  refreshGifs: function () {
+    if (this.gifsCache['cacheTime']) {
+      return new Date().getTime() > this.gifsCache['cacheTime'] + 30000;
+    }
+
+    return false;
+  },
 
   /**
    * treding gif 목록을 가져옵니다.
