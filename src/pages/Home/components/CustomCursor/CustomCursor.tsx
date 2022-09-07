@@ -16,7 +16,8 @@ const CustomCursor = ({ text = '' }: CustomCursorProps) => {
     if (cursorRef.current) {
       cursorRef.current.style.transform = `translate3d(
           ${mousePosition.pageX}px,
-          ${mousePosition.pageY}px
+          ${mousePosition.pageY}px,
+          0
         )`;
     }
   }, [mousePosition]);
