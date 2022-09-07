@@ -23,10 +23,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx|ts|tsx)$/i,
-        exclude: /node_modules/,
-        use: {
-          loader: 'ts-loader'
+        test: /\.(ts|tsx)$/i,
+        loader: 'esbuild-loader',
+        options: {
+          loader: 'tsx',
+          target: 'es2015',
+          tsconfigRaw: require('./tsconfig.json')
         }
       },
       {
